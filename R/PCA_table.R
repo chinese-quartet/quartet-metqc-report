@@ -1,17 +1,15 @@
 # ----------------------------------------------------------------------------------#
-#' Plot PCA
-#' NOTE: with all PCs
+#' @title Export table to plot PCA
+#' @description NOTE: with all PCs exported
 #'
 #' @import data.table
 #' @param dt Data table
-#' @param expDesign Data table, with a column named "col_names"
+#' @param metadata Data table, with a column named "col_names"
 #'
 #' @return Data table
 #'
 #' @examples
-#' dt <- fread("./log2data.csv")
-#' metadata <- fread("./metadata.csv")
-#' PCA_table(dt,metadata)
+#' PCA_table(sample_data,sample_metadata)
 #'
 #' @export
 

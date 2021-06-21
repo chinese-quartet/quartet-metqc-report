@@ -1,0 +1,47 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# MetQC
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of MetQC is to provide Quartet-based QCtools for Metabolomics.
+
+## Installation
+
+You can install the released version of MetQC from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("MetQC")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("chinese-quartet/MetQC")
+```
+## Example
+
+
+```{r example}
+library(MetQC)
+## Count SNR
+CountSNR(sample_data,sample_metadata)
+
+## Get PCA table
+PCA_table(sample_data,sample_metadata)
+```

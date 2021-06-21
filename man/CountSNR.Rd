@@ -2,8 +2,7 @@
 % Please edit documentation in R/CountSNR.R
 \name{CountSNR}
 \alias{CountSNR}
-\title{Calculate SNR
-NOTE: Only PC1 and PC2}
+\title{Calculate SNR}
 \usage{
 CountSNR(dt, metadata)
 }
@@ -16,12 +15,9 @@ CountSNR(dt, metadata)
 Numeric vector
 }
 \description{
-Calculate SNR
-NOTE: Only PC1 and PC2
+Use the top two principal componants in PCA plot for the calculation of SNR.
 }
 \examples{
-dt <- fread("./log2data.csv")
-metadata <- fread("./metadata.csv")
-CountSNR(dt,metadata)
+CountSNR(sample_data,sample_metadata)
 
 }

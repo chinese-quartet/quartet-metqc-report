@@ -1,20 +1,22 @@
 # ----------------------------------------------------------------------------------#
-#' Calculate SNR
-#' NOTE: Only PC1 and PC2
 #' @import data.table
-#' @import plyr
+#'
+#' @title Calculate SNR
+#'
+#' @description Use the top two principal componants in PCA plot for the calculation of SNR.
 #'
 #' @param dt Data table
 #' @param metadata Data table
 #'
 #' @return Numeric vector
+#' @import data.table
 #'
 #' @examples
-#' dt <- fread("./log2data.csv")
-#' metadata <- fread("./metadata.csv")
-#' CountSNR(dt,metadata)
+#' CountSNR(sample_data,sample_metadata)
 #'
 #' @export
+
+
 
 CountSNR <- function(dt, metadata){
     cols <- metadata$col_names
@@ -33,12 +35,10 @@ CountSNR <- function(dt, metadata){
     dt.dist <- data.table(ID.A = rep(rownames(pcs),each=nrow(pcs)),
                           ID.B = rep(rownames(pcs),time=nrow(pcs)))
 
-    dt.dist$Group.A <- mapvalues(dt.dist$ID.A,
-                                   from=metadata$col_names,
-                                   to=metadata$sample)
-    dt.dist$Group.B <- mapvalues(dt.dist$ID.B,
-                                 from=metadata$col_names,
-                                 to=metadata$sample)
+    map <- metadata$sample
+    names(map) <- metadata$col_names
+    dt.dist$Group.A <- map[dt.dist$ID.A]
+    dt.dist$Group.B <- map[dt.dist$ID.B]
 
     dt.dist[,Type:=ifelse(ID.A==ID.B,'Same',
                           ifelse(Group.A==Group.B,'Intra','Inter'))]

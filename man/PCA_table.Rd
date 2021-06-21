@@ -2,26 +2,22 @@
 % Please edit documentation in R/PCA_table.R
 \name{PCA_table}
 \alias{PCA_table}
-\title{Plot PCA
-NOTE: with all PCs}
+\title{Export table to plot PCA}
 \usage{
 PCA_table(dt, metadata)
 }
 \arguments{
 \item{dt}{Data table}
 
-\item{expDesign}{Data table, with a column named "col_names"}
+\item{metadata}{Data table, with a column named "col_names"}
 }
 \value{
 Data table
 }
 \description{
-Plot PCA
-NOTE: with all PCs
+NOTE: with all PCs exported
 }
 \examples{
-dt <- fread("./log2data.csv")
-metadata <- fread("./metadata.csv")
-PCA_table(dt,metadata)
+PCA_table(sample_data,sample_metadata)
 
 }

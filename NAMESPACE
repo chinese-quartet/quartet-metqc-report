@@ -3,4 +3,3 @@
 export(CountSNR)
 export(PCA_table)
 import(data.table)
-import(plyr)
