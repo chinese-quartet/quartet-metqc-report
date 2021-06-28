@@ -2,7 +2,7 @@
 % Please edit documentation in R/CountSNR.R
 \name{CountSNR}
 \alias{CountSNR}
-\title{Calculate SNR}
+\title{Calculate SNR and plot PCA}
 \usage{
 CountSNR(dt, metadata)
 }
@@ -15,7 +15,7 @@ CountSNR(dt, metadata)
 Numeric vector
 }
 \description{
-Use the top two principal componants in PCA plot for the calculation of SNR.
+Plot PCA and calculate SNR based on the first two principal componants of PCA.
 }
 \examples{
 CountSNR(sample_data,sample_metadata)

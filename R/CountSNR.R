@@ -1,22 +1,21 @@
-# ----------------------------------------------------------------------------------#
-#' @import data.table
+# ---------------------------------------------------------------------------------- #
+#' @title Calculate SNR and plot PCA
 #'
-#' @title Calculate SNR
-#'
-#' @description Use the top two principal componants in PCA plot for the calculation of SNR.
+#' @description Plot PCA and calculate SNR based on the first two principal componants of PCA.
 #'
 #' @param dt Data table
 #' @param metadata Data table
 #'
 #' @return Numeric vector
-#' @import data.table
+#' @importFrom data.table setkey
+#' @importFrom data.table data.table
+#' @importFrom data.table :=
+#' @importFrom ggplot2 ggplot
 #'
 #' @examples
 #' CountSNR(sample_data,sample_metadata)
 #'
 #' @export
-
-
 
 CountSNR <- function(dt, metadata){
     cols <- metadata$col_names
@@ -44,11 +43,29 @@ CountSNR <- function(dt, metadata){
                           ifelse(Group.A==Group.B,'Intra','Inter'))]
     dt.dist[,Dist:=(dt.perc.pcs[1]$Percent*(pcs[ID.A,1]-pcs[ID.B,1])^2+dt.perc.pcs[2]$Percent*(pcs[ID.A,2]-pcs[ID.B,2])^2)]
 
-    dt.dist.stats <- dt.dist[,.(Avg.Dist=mean(Dist)),by=.(Type)]
+    dt.dist.stats <- dt.dist[,.(Avg.Dist=mean(Dist)),by=Type]
     setkey(dt.dist.stats,Type)
     signoise <- dt.dist.stats['Inter']$Avg.Dist/dt.dist.stats['Intra']$Avg.Dist
 
     signoise_db <- 10*log10(signoise)
+    
+    pcs$col_names <- rownames(pcs)
+    dt.forPlot <- merge(pcs,metadata,by='col_names')
+    colors.Quartet <- c(D5="#4CC3D9",D6="#7BC8A4",F7="#FFC65D",M8="#F16745")
+    
+    pcaplot <- ggplot(dt.forPlot,aes(x=PC1,y=PC2)) +
+        geom_point(aes(color=sample),
+                   size=3) + theme_bw()+
+        labs(x=sprintf("PC1: %.1f%%", summary(pca_prcomp)$importance[2,1]*100),
+             y=sprintf("PC2: %.1f%%", summary(pca_prcomp)$importance[2,2]*100),
+             color='sample',
+             title=sprintf("SNR = %.2f", signoise_db))+
+        theme(plot.title = element_text(hjust=0.5,size=12))+
+        scale_color_manual(values=colors.Quartet) +
+        theme(legend.position = "bottom")
+    
+    path <- getwd()
+    ggsave(filename = paste0(path,"/PCA_withSNR.pdf"),pcaplot,width = 4,height = 4)
     return(signoise_db)
 }
 
