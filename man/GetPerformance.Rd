@@ -4,7 +4,12 @@
 \alias{GetPerformance}
 \title{Get output table}
 \usage{
-GetPerformance(dt, metadata)
+GetPerformance(
+  dt.path = NULL,
+  metadata.path = NULL,
+  dt = NULL,
+  metadata = NULL
+)
 }
 \arguments{
 \item{dt}{Data table}
@@ -18,6 +23,6 @@ Numeric vector
 Get information of overall performance with historical data.
 }
 \examples{
-GetPerformance(sample_data,sample_metadata)
+GetPerformance(dt=sample_data,metadata=sample_metadata)
 
 }

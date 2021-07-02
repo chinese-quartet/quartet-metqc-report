@@ -4,7 +4,7 @@
 \alias{CountCTR}
 \title{Calculate and plot CTR}
 \usage{
-CountCTR(dt, metadata)
+CountCTR(dt.path = NULL, metadata.path = NULL, dt = NULL, metadata = NULL)
 }
 \arguments{
 \item{dt}{Data table}
@@ -18,6 +18,6 @@ Numeric vector
 Calculate correlation to reference datasets and plot related scatter plot
 }
 \examples{
-CountCTR(sample_data,sample_metadata)
+CountCTR(dt=sample_data,metadata=sample_metadata)
 
 }

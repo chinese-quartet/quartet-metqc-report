@@ -4,7 +4,7 @@
 \alias{CountSNR}
 \title{Calculate SNR and plot PCA}
 \usage{
-CountSNR(dt, metadata)
+CountSNR(dt.path = NULL, metadata.path = NULL, dt = NULL, metadata = NULL)
 }
 \arguments{
 \item{dt}{Data table}
@@ -18,6 +18,6 @@ Numeric vector
 Plot PCA and calculate SNR based on the first two principal componants of PCA.
 }
 \examples{
-CountSNR(sample_data,sample_metadata)
+CountSNR(dt=sample_data,metadata=sample_metadata)
 
 }

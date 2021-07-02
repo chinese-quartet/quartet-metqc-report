@@ -10,13 +10,18 @@
 #' @importFrom data.table data.table
 #'
 #' @examples
-#' GetPerformance(sample_data,sample_metadata)
+#' GetPerformance(dt=sample_data,metadata=sample_metadata)
 #'
 #' @export
 
-GetPerformance <- function(dt,metadata){
-    SNR <- CountSNR(dt,metadata)
-    CTR <- CountCTR(dt,metadata)
+GetPerformance <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+    if(!is.null(dt.path) & !is.null(metadata.path)){
+        dt <- fread(dt.path)
+        metadata <- fread(metadata.path)
+    }
+    
+    SNR <- CountSNR(dt=dt,metadata=metadata)
+    CTR <- CountCTR(dt=dt,metadata=metadata)
     dt.overall <- HistoricalData
     
     outputdt <- data.table(
@@ -28,5 +33,7 @@ GetPerformance <- function(dt,metadata){
                  paste(rank(-c(CTR,dt.overall$CTR))[1],"/",nrow(dt.overall)+1))
     )
     path <- getwd()
-    write.csv(x = outputdt,file = paste0(path,"/PerformanceTable.csv"),row.names = F,quote = T)
+    subDir <- "output"  
+    dir.create(file.path(path, subDir), showWarnings = FALSE)
+    write.csv(x = outputdt,file = paste0(path,"/output/PerformanceTable.csv"),row.names = F,quote = T)
 }

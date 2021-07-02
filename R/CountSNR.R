@@ -8,18 +8,34 @@
 #'
 #' @return Numeric vector
 #' @importFrom data.table setkey
+#' @importFrom data.table fread
 #' @importFrom data.table data.table
+#' @importFrom data.table rbindlist
+#' @importFrom data.table melt
+#' @importFrom data.table setDT
 #' @importFrom data.table :=
 #' @importFrom ggplot2 ggplot
-#'
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 ggsave
+#' @importFrom ggplot2 element_text
 #' @examples
-#' CountSNR(sample_data,sample_metadata)
+#' CountSNR(dt=sample_data,metadata=sample_metadata)
 #'
 #' @export
 
-CountSNR <- function(dt, metadata){
+CountSNR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+    
+    if(!is.null(dt.path) & !is.null(metadata.path)){
+        dt <- fread(dt.path)
+        metadata <- fread(metadata.path)
+    }
+    
     cols <- metadata$col_names
-    #!!!!!!!!!!!!!!!! Must set key
     setkey(setDT(metadata),col_names)
     dt.num <- subset(x = dt,select = cols)
     dt.num.t.cp <- t(data.frame(dt.num[complete.cases(dt.num),]))
@@ -64,8 +80,11 @@ CountSNR <- function(dt, metadata){
         scale_color_manual(values=colors.Quartet) +
         theme(legend.position = "bottom")
     
-    path <- getwd()
-    ggsave(filename = paste0(path,"/PCA_withSNR.pdf"),pcaplot,width = 4,height = 4)
+    path <- getwd() 
+    subDir <- "output"  
+    dir.create(file.path(path, subDir), showWarnings = FALSE)
+    write.csv(x = dt.forPlot,file = paste0(path,"/output/PCAtable.csv"),row.names = F)
+    ggsave(filename = paste0(path,"/output/PCA_withSNR.pdf"),pcaplot,width = 3.8,height = 4)
     return(signoise_db)
 }
 

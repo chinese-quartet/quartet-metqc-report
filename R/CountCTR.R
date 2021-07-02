@@ -8,16 +8,38 @@
 #'
 #' @return Numeric vector
 #' @importFrom data.table data.table
+#' @importFrom data.table rbindlist
+#' @importFrom data.table melt
+#' @importFrom data.table setDT
+#' @importFrom data.table :=
 #' @importFrom data.table :=
 #' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 scale_alpha_manual
+#' @importFrom ggplot2 scale_y_log10
+#' @importFrom ggplot2 scale_x_log10
+#' @importFrom ggplot2 geom_abline
+#' @importFrom ggplot2 ggsave
+#' @importFrom ggplot2 element_text
 #' @importFrom stringr str_split_fixed
 #'
 #' @examples
-#' CountCTR(sample_data,sample_metadata)
+#' CountCTR(dt=sample_data,metadata=sample_metadata)
 #'
 #' @export
 
-CountCTR <- function(dt, metadata){
+CountCTR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+    
+    if(!is.null(dt.path) & !is.null(metadata.path)){
+        dt <- fread(dt.path)
+        metadata <- fread(metadata.path)
+    }
+    
     RefDataset <- MetReference
     metsinRef <- unique(RefDataset$HMDB_id)
     
@@ -52,7 +74,7 @@ CountCTR <- function(dt, metadata){
     colnames(togetRe.mean)[c(2,5)] <- c("sample.B","Mean.B")
     cols <- c("HMDB_id","sample.B","Mean.B")
     togetRe.mean.rep.full <- merge(togetRe.mean.rep2,togetRe.mean[,..cols],by = c("HMDB_id","sample.B"))
-    togetRe.mean.rep.full$sample.B <- stringr::str_split_fixed(togetRe.mean.rep.full$sample.B,"_",4)[,4]
+    togetRe.mean.rep.full$sample.B <- str_split_fixed(togetRe.mean.rep.full$sample.B,"_",4)[,4]
     togetRe.mean.rep.full$dataset <- paste0(togetRe.mean.rep.full$sample.B,"to",togetRe.mean.rep.full$sample)
     togetRe.mean.rep.full$re <- togetRe.mean.rep.full$Mean.B / togetRe.mean.rep.full$Mean
     
@@ -70,9 +92,9 @@ CountCTR <- function(dt, metadata){
         theme(legend.position="right") +
         scale_y_log10(limits = c(0.1,10))+ 
         scale_x_log10(limits = c(0.1,10))+
-        xlab("Relative metabolic profiles in reference dataset") +
-        ylab("Measured ratios between samples") +
-        labs(color = "Metabolite type",alpha = "Metabolite type",
+        labs(x = "Relative metabolic profiles in reference dataset",
+             y = "Measured ratios between samples",
+             color = "Metabolite type",alpha = "Metabolite type",
              title=sprintf("CTR = %.2f", CTR)) +
         geom_abline(intercept = 0, slope = 1,linetype = "dashed",color="red") +
         theme_bw() + 
@@ -80,6 +102,9 @@ CountCTR <- function(dt, metadata){
         theme(legend.position = "bottom")
     
     path <- getwd() 
-    ggsave(filename = paste0(path,"/ScatterPlot_withCTR.pdf"),scplot,width = 3.8,height = 4)
+    subDir <- "output"  
+    dir.create(file.path(path, subDir), showWarnings = FALSE)
+    write.csv(x = togetRe.withRef,file = paste0(path,"/output/CTRtable.csv"),row.names = F)
+    ggsave(filename = paste0(path,"/output/ScatterPlot_withCTR.pdf"),scplot,width = 3.8,height = 4)
     return(CTR)
 }
