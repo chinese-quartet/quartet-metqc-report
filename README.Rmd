@@ -39,9 +39,19 @@ devtools::install_github("chinese-quartet/MetQC")
 
 ```{r example}
 library(MetQC)
-## Count SNR
-CountSNR(sample_data,sample_metadata)
+## Get performance report for metabolomics data
+### The result document was outputed to "output" directory under the working directory
+GetPerformance(dt=sample_data,metadata=sample_metadata)
 
-## Get PCA table
-PCA_table(sample_data,sample_metadata)
+## Count SNR and plot related PCA plot
+CountSNR(dt=sample_data,metadata=sample_metadata)
+
+## Count CTR and plot related scatter plot
+CountCTR(dt=sample_data,metadata=sample_metadata)
+
+### The output directory can also be assigned.
+# GetPerformance(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
+# CountSNR(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
+# CountCTR(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
 ```
+

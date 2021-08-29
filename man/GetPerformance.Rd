@@ -7,6 +7,7 @@
 GetPerformance(
   dt.path = NULL,
   metadata.path = NULL,
+  output.path = NULL,
   dt = NULL,
   metadata = NULL
 )

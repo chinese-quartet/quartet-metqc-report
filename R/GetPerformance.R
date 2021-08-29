@@ -14,7 +14,7 @@
 #'
 #' @export
 
-GetPerformance <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+GetPerformance <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     if(!is.null(dt.path) & !is.null(metadata.path)){
         dt <- fread(dt.path)
         metadata <- fread(metadata.path)
@@ -32,8 +32,13 @@ GetPerformance <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=N
         "Rank"=c(paste(rank(-c(SNR,dt.overall$SNR))[1],"/",nrow(dt.overall)+1),
                  paste(rank(-c(CTR,dt.overall$CTR))[1],"/",nrow(dt.overall)+1))
     )
-    path <- getwd()
-    subDir <- "output"  
-    dir.create(file.path(path, subDir), showWarnings = FALSE)
-    write.csv(x = outputdt,file = paste0(path,"/output/PerformanceTable.csv"),row.names = F,quote = T)
+    
+    if(is.null(output.path)){
+        path <- getwd()
+        subDir <- "output"  
+        dir.create(file.path(path, subDir), showWarnings = FALSE)
+        output.path <- paste0(path,"/output/")
+    } 
+    
+    write.csv(x = outputdt,file = paste0(output.path,"PerformanceTable.csv"),row.names = F,quote = T)
 }

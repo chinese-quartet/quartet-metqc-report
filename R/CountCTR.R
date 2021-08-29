@@ -33,7 +33,7 @@
 #'
 #' @export
 
-CountCTR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+CountCTR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     
     if(!is.null(dt.path) & !is.null(metadata.path)){
         dt <- fread(dt.path)
@@ -92,8 +92,8 @@ CountCTR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
         theme(legend.position="right") +
         scale_y_log10(limits = c(0.1,10))+ 
         scale_x_log10(limits = c(0.1,10))+
-        labs(x = "Relative metabolic profiles in reference dataset",
-             y = "Measured ratios between samples",
+        labs(x = "Ratios in reference datasets",
+             y = "Measured ratios",
              color = "Metabolite type",alpha = "Metabolite type",
              title=sprintf("CTR = %.2f", CTR)) +
         geom_abline(intercept = 0, slope = 1,linetype = "dashed",color="red") +
@@ -101,10 +101,15 @@ CountCTR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
         theme(plot.title = element_text(hjust=0.5,size=12)) +
         theme(legend.position = "bottom")
     
-    path <- getwd() 
-    subDir <- "output"  
-    dir.create(file.path(path, subDir), showWarnings = FALSE)
-    write.csv(x = togetRe.withRef,file = paste0(path,"/output/CTRtable.csv"),row.names = F)
-    ggsave(filename = paste0(path,"/output/ScatterPlot_withCTR.pdf"),scplot,width = 3.8,height = 4)
+    if(is.null(output.path)){
+        path <- getwd()
+        subDir <- "output"  
+        dir.create(file.path(path, subDir), showWarnings = FALSE)
+        output.path <- paste0(path,"/output/")
+    } 
+    
+    write.csv(x = togetRe.withRef,file = paste0(output.path,"CTRtable.csv"),row.names = F)
+    ggsave(filename = paste0(output.path,"ScatterPlot_withCTR.png"),scplot,,device = "png",
+           width = 8.8,height = 8,units = c( "cm"),dpi = 300)
     return(CTR)
 }

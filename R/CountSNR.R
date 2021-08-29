@@ -28,7 +28,7 @@
 #'
 #' @export
 
-CountSNR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
+CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     
     if(!is.null(dt.path) & !is.null(metadata.path)){
         dt <- fread(dt.path)
@@ -80,11 +80,17 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, dt=NULL, metadata=NULL){
         scale_color_manual(values=colors.Quartet) +
         theme(legend.position = "bottom")
     
-    path <- getwd() 
-    subDir <- "output"  
-    dir.create(file.path(path, subDir), showWarnings = FALSE)
-    write.csv(x = dt.forPlot,file = paste0(path,"/output/PCAtable.csv"),row.names = F)
-    ggsave(filename = paste0(path,"/output/PCA_withSNR.pdf"),pcaplot,width = 3.8,height = 4)
+    
+    if(is.null(output.path)){
+        path <- getwd()
+        subDir <- "output"  
+        dir.create(file.path(path, subDir), showWarnings = FALSE)
+        output.path <- paste0(path,"/output/")
+    } 
+    
+    write.csv(x = dt.forPlot,file = paste0(output.path,"PCAtable.csv"),row.names = F)
+    ggsave(filename = paste0(output.path,"PCA_withSNR.png"),pcaplot,
+           device = "png",width = 8.8,height = 8,units = c( "cm"),dpi = 300)
     return(signoise_db)
 }
 

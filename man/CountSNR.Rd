@@ -4,7 +4,13 @@
 \alias{CountSNR}
 \title{Calculate SNR and plot PCA}
 \usage{
-CountSNR(dt.path = NULL, metadata.path = NULL, dt = NULL, metadata = NULL)
+CountSNR(
+  dt.path = NULL,
+  metadata.path = NULL,
+  output.path = NULL,
+  dt = NULL,
+  metadata = NULL
+)
 }
 \arguments{
 \item{dt}{Data table}

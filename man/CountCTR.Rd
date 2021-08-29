@@ -4,7 +4,13 @@
 \alias{CountCTR}
 \title{Calculate and plot CTR}
 \usage{
-CountCTR(dt.path = NULL, metadata.path = NULL, dt = NULL, metadata = NULL)
+CountCTR(
+  dt.path = NULL,
+  metadata.path = NULL,
+  output.path = NULL,
+  dt = NULL,
+  metadata = NULL
+)
 }
 \arguments{
 \item{dt}{Data table}
