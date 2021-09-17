@@ -1,7 +1,7 @@
 Package: MetQC
 Type: Package
 Title: Quartet-based QCtools for Metabolomics
-Version: 0.3.3
+Version: 0.3.4
 Author: Naixin Zhang
 Maintainer: Naixin Zhang <nxzhang96@gmail.com>
 Description: Quartet-based QCtools for metbolomics studies. 
