@@ -31,7 +31,7 @@
 CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     
     if(!is.null(dt.path) & !is.null(metadata.path)){
-        dt <- fread(dt.path)
+        dt <- MapIDs(dt.path=dt.path)
         metadata <- fread(metadata.path)
     }
     
@@ -85,11 +85,11 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
         path <- getwd()
         subDir <- "output"  
         dir.create(file.path(path, subDir), showWarnings = FALSE)
-        output.path <- paste0(path,"/output/")
+        output.path <- file.path(path,"output")
     } 
     
-    write.csv(x = dt.forPlot,file = paste0(output.path,"PCAtable.csv"),row.names = F)
-    ggsave(filename = paste0(output.path,"PCA_withSNR.png"),pcaplot,
+    write.csv(x = dt.forPlot,file = file.path(output.path,"PCAtable.csv"),row.names = F)
+    ggsave(filename = file.path(output.path,"PCA_withSNR.png"),pcaplot,
            device = "png",width = 8.8,height = 8,units = c( "cm"),dpi = 300)
     return(signoise_db)
 }

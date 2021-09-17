@@ -2,7 +2,7 @@
 #' 
 #' @description A \code{data.table} file.
 #' 
-#' @format A \code{data.table} with 12 columns. 
+#' @format A \code{data.table} with 6 columns. 
 #' \describe{
 #' \item{col_names}{A column needed for indentification of the ids of samples.}
 #' }

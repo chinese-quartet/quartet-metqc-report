@@ -36,51 +36,56 @@
 CountCTR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     
     if(!is.null(dt.path) & !is.null(metadata.path)){
-        dt <- fread(dt.path)
+        dt <- MapIDs(dt.path=dt.path)
         metadata <- fread(metadata.path)
     }
     
     RefDataset <- MetReference
-    metsinRef <- unique(RefDataset$HMDB_id)
+    metsinRef <- unique(RefDataset$HMDBID)
     
-    dt.long <- melt(dt,id.vars = "HMDB_id",variable.name  = "col_names")
+    metadata$platform <- gsub("Untargeted","U",metadata$strategy)
+    metadata$platform <- gsub("Targeted","T",metadata$platform)
+    metadata$batchcode <- paste(metadata$platform, metadata$lab, metadata$batch, sep = "_")
+    metadata$samplecode <- paste(metadata$batchcode, metadata$sample, sep = "_")
+    
+    
+    dt.long <- melt(dt[,-c("metabolites")],id.vars = "HMDBID",variable.name  = "col_names")
     dt.long.cp <- dt.long[complete.cases(dt.long),]
-    dt.long.cp$value <- 2^dt.long.cp$value
-    cols <- c("col_names","sample","recode","longsp")
+    cols <- c("col_names","sample","batchcode","samplecode")
     dt.long.cp.info <- data.table(merge(dt.long.cp,metadata[,..cols],by = "col_names"))
     
-    togetRe <- dt.long.cp.info[HMDB_id %in% metsinRef,]
-    togetRe.mean <- togetRe[,.(Mean = mean(value,na.rm = T)),by = c("HMDB_id","longsp","sample","recode")]
+    togetRe <- dt.long.cp.info[HMDBID %in% metsinRef,]
+    togetRe.mean <- togetRe[,.(Mean = mean(value,na.rm = T)),by = c("HMDBID","samplecode","sample","batchcode")]
     togetRe.mean$N <- togetRe.mean$sample
     togetRe.mean$N <- ifelse(togetRe.mean$sample == "D5",3,1)
     togetRe.mean$N <- ifelse(togetRe.mean$sample == "D6",2,togetRe.mean$N)
     
-    togetRe.mean.rep <- togetRe.mean[rep(1:.N,N)][,Indx:=1:.N,by=c("longsp","HMDB_id")]
+    togetRe.mean.rep <- togetRe.mean[rep(1:.N,N)][,Indx:=1:.N,by=c("samplecode","HMDBID")]
     togetRe.mean.rep$sample.B <- togetRe.mean.rep$Indx
     togetRe.mean.rep.D5 <- togetRe.mean.rep[sample == "D5",]
     togetRe.mean.rep.D5$sample.B <- gsub(1,"D6",togetRe.mean.rep.D5$sample.B)
     togetRe.mean.rep.D5$sample.B <- gsub(2,"F7",togetRe.mean.rep.D5$sample.B)
     togetRe.mean.rep.D5$sample.B <- gsub(3,"M8",togetRe.mean.rep.D5$sample.B)
-    togetRe.mean.rep.D5$sample.B <- paste(togetRe.mean.rep.D5$recode,togetRe.mean.rep.D5$sample.B,sep = "_")
+    togetRe.mean.rep.D5$sample.B <- paste(togetRe.mean.rep.D5$batchcode,togetRe.mean.rep.D5$sample.B,sep = "_")
     togetRe.mean.rep.D6 <- togetRe.mean.rep[sample == "D6",]
     togetRe.mean.rep.D6$sample.B <- gsub(1,"F7",togetRe.mean.rep.D6$sample.B)
     togetRe.mean.rep.D6$sample.B <- gsub(2,"M8",togetRe.mean.rep.D6$sample.B)
-    togetRe.mean.rep.D6$sample.B <- paste(togetRe.mean.rep.D6$recode,togetRe.mean.rep.D6$sample.B,sep = "_")
+    togetRe.mean.rep.D6$sample.B <- paste(togetRe.mean.rep.D6$batchcode,togetRe.mean.rep.D6$sample.B,sep = "_")
     togetRe.mean.rep.F7 <- togetRe.mean.rep[sample == "F7",]
     togetRe.mean.rep.F7$sample.B <- gsub(1,"M8",togetRe.mean.rep.F7$sample.B)
-    togetRe.mean.rep.F7$sample.B <- paste(togetRe.mean.rep.F7$recode,togetRe.mean.rep.F7$sample.B,sep = "_")
+    togetRe.mean.rep.F7$sample.B <- paste(togetRe.mean.rep.F7$batchcode,togetRe.mean.rep.F7$sample.B,sep = "_")
     togetRe.mean.rep2 <- rbindlist(list(togetRe.mean.rep.D5,togetRe.mean.rep.D6,togetRe.mean.rep.F7))
     
     colnames(togetRe.mean)[c(2,5)] <- c("sample.B","Mean.B")
-    cols <- c("HMDB_id","sample.B","Mean.B")
-    togetRe.mean.rep.full <- merge(togetRe.mean.rep2,togetRe.mean[,..cols],by = c("HMDB_id","sample.B"))
+    cols <- c("HMDBID","sample.B","Mean.B")
+    togetRe.mean.rep.full <- merge(togetRe.mean.rep2,togetRe.mean[,..cols],by = c("HMDBID","sample.B"))
     togetRe.mean.rep.full$sample.B <- str_split_fixed(togetRe.mean.rep.full$sample.B,"_",4)[,4]
     togetRe.mean.rep.full$dataset <- paste0(togetRe.mean.rep.full$sample.B,"to",togetRe.mean.rep.full$sample)
     togetRe.mean.rep.full$re <- togetRe.mean.rep.full$Mean.B / togetRe.mean.rep.full$Mean
     
-    cols <- c("recode","HMDB_id","dataset","re")
-    togetRe.withRef <- merge(togetRe.mean.rep.full[,..cols],RefDataset,by = c("dataset","HMDB_id"))
-    togetRe.withRef$type <- ifelse(is.na(togetRe.withRef$recodes),"spike-ins","other\nmetabolites")
+    cols <- c("batchcode","HMDBID","dataset","re")
+    togetRe.withRef <- merge(togetRe.mean.rep.full[,..cols],RefDataset,by = c("dataset","HMDBID"))
+    togetRe.withRef$type <- ifelse(is.na(togetRe.withRef$batchcodes),"spike-ins","other\nmetabolites")
     
     CTR <- cor(togetRe.withRef$mean,togetRe.withRef$re,use = "pairwise.complete.obs")
     togetRe.withRef$type <- factor(togetRe.withRef$type,levels = c("spike-ins","other\nmetabolites"))
@@ -105,11 +110,11 @@ CountCTR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
         path <- getwd()
         subDir <- "output"  
         dir.create(file.path(path, subDir), showWarnings = FALSE)
-        output.path <- paste0(path,"/output/")
+        output.path <- file.path(path,"output")
     } 
     
-    write.csv(x = togetRe.withRef,file = paste0(output.path,"CTRtable.csv"),row.names = F)
-    ggsave(filename = paste0(output.path,"ScatterPlot_withCTR.png"),scplot,,device = "png",
+    write.csv(x = togetRe.withRef,file = file.path(output.path,"CTRtable.csv"),row.names = F)
+    ggsave(filename = file.path(output.path,"ScatterPlot_withCTR.png"),scplot,device = "png",
            width = 8.8,height = 8,units = c( "cm"),dpi = 300)
     return(CTR)
 }

@@ -16,12 +16,19 @@
 
 GetPerformance <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NULL, metadata=NULL){
     if(!is.null(dt.path) & !is.null(metadata.path)){
-        dt <- fread(dt.path)
+        dt <- MapIDs(dt.path=dt.path)
         metadata <- fread(metadata.path)
     }
     
-    SNR <- CountSNR(dt=dt,metadata=metadata)
-    CTR <- CountCTR(dt=dt,metadata=metadata)
+    if(is.null(output.path)){
+        path <- getwd()
+        subDir <- "output"  
+        dir.create(file.path(path, subDir), showWarnings = FALSE)
+        output.path <- file.path(path,"output")
+    } 
+    
+    SNR <- CountSNR(dt=dt,metadata=metadata,output.path = output.path)
+    CTR <- CountCTR(dt=dt,metadata=metadata,output.path = output.path)
     dt.overall <- HistoricalData
     
     outputdt <- data.table(
@@ -33,12 +40,5 @@ GetPerformance <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL,
                  paste(rank(-c(CTR,dt.overall$CTR))[1],"/",nrow(dt.overall)+1))
     )
     
-    if(is.null(output.path)){
-        path <- getwd()
-        subDir <- "output"  
-        dir.create(file.path(path, subDir), showWarnings = FALSE)
-        output.path <- paste0(path,"/output/")
-    } 
-    
-    write.csv(x = outputdt,file = paste0(output.path,"PerformanceTable.csv"),row.names = F,quote = T)
+    write.csv(x = outputdt,file = file.path(output.path,"PerformanceTable.csv"),row.names = F,quote = T)
 }

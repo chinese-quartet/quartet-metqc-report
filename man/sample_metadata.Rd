@@ -5,7 +5,7 @@
 \alias{sample_metadata}
 \title{The metadata of sample data for analysis}
 \format{
-A \code{data.table} with 12 columns. 
+A \code{data.table} with 6 columns. 
 \describe{
 \item{col_names}{A column needed for indentification of the ids of samples.}
 }

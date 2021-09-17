@@ -5,9 +5,9 @@
 \alias{sample_data}
 \title{Sample data for analysis}
 \format{
-A \code{data.table} with 13 columns. 
+A \code{data.table} with 14 columns. 
 \describe{
-\item{HMDB_id}{A column indicates the ids of metabolites, but it is not necessary.}
+\item{HMDBID}{A column indicates the ids of metabolites.}
 }
 }
 \usage{
