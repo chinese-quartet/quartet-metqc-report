@@ -1,0 +1,28 @@
+info:
+  name: QC Report for Quartet Metabolomics
+  version: v0.1.1
+  description: Generate the QC Report for Quartet Metabolomics data.
+  category: Report
+  home: https://github.com/tservice-plugins/quartet-metqc-report
+  source: PGx
+  short_name: quartet-metqc-report
+  icons:
+    - src: ""
+      type: image/png
+      sizes: 192x192
+  author: PGx
+plugin:
+  name: quartet-metqc-report
+  display-name: QC Report for Quartet Metabolomics
+  lazy-load: false
+init:
+  # Unpack environment file to the directory, repository/envs/quartet-metqc-report
+  - step: unpack-env
+    envname: quartet-metqc-report
+    postunpack: chmod a+x {{ENV_DEST_DIR}}/bin/metqc.sh
+  - step: load-namespace
+    namespace: tservice.plugins.quartet-metqc-report
+  - step: register-plugin
+    entrypoint: tservice.plugins.quartet-metqc-report/metadata
+  - step: init-event
+    entrypoint: tservice.plugins.quartet-metqc-report/events-init
