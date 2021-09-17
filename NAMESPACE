@@ -3,6 +3,7 @@
 export(CountCTR)
 export(CountSNR)
 export(GetPerformance)
+export(MapIDs)
 importFrom(data.table,":=")
 importFrom(data.table,data.table)
 importFrom(data.table,fread)
