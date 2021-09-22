@@ -54,7 +54,7 @@
    {:name "quartet-metqc-report"
     :summary "Visualizes Quality Control(QC) results from metabolomics data for Quartet Project."
     :params-schema quartet-metqc-report-params-body
-    :handler (fn [{:keys [name data_file metadata_file description]
+    :handler (fn [{:keys [name data_file metadata_file description owner]
                    :or {description (format "Quality control report for %s" name)}
                    :as payload}]
                (let [payload (merge {:description description} payload)
@@ -68,6 +68,7 @@
                      task-id (create-task! {:name           name
                                             :description    description
                                             :payload        payload
+                                            :owner          owner
                                             :plugin-name    "quartet-metqc-report"
                                             :plugin-type    "ReportPlugin"
                                             :plugin-version "v0.1.0"
