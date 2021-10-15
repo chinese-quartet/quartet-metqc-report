@@ -35,6 +35,10 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
         metadata <- fread(metadata.path)
     }
     
+    if(is.null(dt.path)){
+        dt <- MapIDs(dt = dt)
+    }
+    
     cols <- metadata$col_names
     setkey(setDT(metadata),col_names)
     dt.num <- subset(x = dt,select = cols)

@@ -12,7 +12,7 @@
 #' @importFrom data.table melt
 #' @importFrom data.table setDT
 #' @importFrom data.table :=
-#' @importFrom data.table :=
+#' @importFrom data.table dcast.data.table
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 geom_point
@@ -21,8 +21,8 @@
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 scale_color_manual
 #' @importFrom ggplot2 scale_alpha_manual
-#' @importFrom ggplot2 scale_y_log10
-#' @importFrom ggplot2 scale_x_log10
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
 #' @importFrom ggplot2 geom_abline
 #' @importFrom ggplot2 ggsave
 #' @importFrom ggplot2 element_text
@@ -40,6 +40,10 @@ CountCTR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
         metadata <- fread(metadata.path)
     }
     
+    if(is.null(dt.path)){
+        dt <- MapIDs(dt = dt)
+    }
+    
     RefDataset <- MetReference
     metsinRef <- unique(RefDataset$HMDBID)
     
@@ -47,56 +51,50 @@ CountCTR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
     metadata$platform <- gsub("Targeted","T",metadata$platform)
     metadata$batchcode <- paste(metadata$platform, metadata$lab, metadata$batch, sep = "_")
     metadata$samplecode <- paste(metadata$batchcode, metadata$sample, sep = "_")
-    
+
     
     dt.long <- melt(dt[,-c("metabolites")],id.vars = "HMDBID",variable.name  = "col_names")
+    dt.long[value == 0]$value <- NA
     dt.long.cp <- dt.long[complete.cases(dt.long),]
     cols <- c("col_names","sample","batchcode","samplecode")
     dt.long.cp.info <- data.table(merge(dt.long.cp,metadata[,..cols],by = "col_names"))
+    dt.long.cp.info.log2 <- dt.long.cp.info
+    dt.long.cp.info.log2$value <- log2(dt.long.cp.info.log2$value)
     
     togetRe <- dt.long.cp.info[HMDBID %in% metsinRef,]
-    togetRe.mean <- togetRe[,.(Mean = mean(value,na.rm = T)),by = c("HMDBID","samplecode","sample","batchcode")]
-    togetRe.mean$N <- togetRe.mean$sample
-    togetRe.mean$N <- ifelse(togetRe.mean$sample == "D5",3,1)
-    togetRe.mean$N <- ifelse(togetRe.mean$sample == "D6",2,togetRe.mean$N)
+    # stat numbers, and CV for each samplecode
+    cv <- function(x){sd(x, na.rm = T)/mean(x, na.rm=T)}
+    togetRe.stat <- togetRe[ , .(COUNT = .N, Mean = mean(value), CV = cv(value)), 
+                                               by = c("samplecode","HMDBID")]
+    toremove <- togetRe.stat[COUNT < 2 ,c("samplecode","HMDBID"),with = F]
     
-    togetRe.mean.rep <- togetRe.mean[rep(1:.N,N)][,Indx:=1:.N,by=c("samplecode","HMDBID")]
-    togetRe.mean.rep$sample.B <- togetRe.mean.rep$Indx
-    togetRe.mean.rep.D5 <- togetRe.mean.rep[sample == "D5",]
-    togetRe.mean.rep.D5$sample.B <- gsub(1,"D6",togetRe.mean.rep.D5$sample.B)
-    togetRe.mean.rep.D5$sample.B <- gsub(2,"F7",togetRe.mean.rep.D5$sample.B)
-    togetRe.mean.rep.D5$sample.B <- gsub(3,"M8",togetRe.mean.rep.D5$sample.B)
-    togetRe.mean.rep.D5$sample.B <- paste(togetRe.mean.rep.D5$batchcode,togetRe.mean.rep.D5$sample.B,sep = "_")
-    togetRe.mean.rep.D6 <- togetRe.mean.rep[sample == "D6",]
-    togetRe.mean.rep.D6$sample.B <- gsub(1,"F7",togetRe.mean.rep.D6$sample.B)
-    togetRe.mean.rep.D6$sample.B <- gsub(2,"M8",togetRe.mean.rep.D6$sample.B)
-    togetRe.mean.rep.D6$sample.B <- paste(togetRe.mean.rep.D6$batchcode,togetRe.mean.rep.D6$sample.B,sep = "_")
-    togetRe.mean.rep.F7 <- togetRe.mean.rep[sample == "F7",]
-    togetRe.mean.rep.F7$sample.B <- gsub(1,"M8",togetRe.mean.rep.F7$sample.B)
-    togetRe.mean.rep.F7$sample.B <- paste(togetRe.mean.rep.F7$batchcode,togetRe.mean.rep.F7$sample.B,sep = "_")
-    togetRe.mean.rep2 <- rbindlist(list(togetRe.mean.rep.D5,togetRe.mean.rep.D6,togetRe.mean.rep.F7))
+    togetRe.log2 <- dt.long.cp.info.log2[HMDBID %in% metsinRef,]
+    togetRe.filter <- togetRe.log2[!toremove, on=.(samplecode,HMDBID)]
+
+    cols <- c("HMDBID","sample","value")
+    togetRe.ave <- togetRe.filter[,.(log2mean = mean(value)), by = c("HMDBID","sample")]
+    togetRe.ave.wide <- dcast.data.table(togetRe.ave,HMDBID~sample,value.var = "log2mean")
+    togetRe.ave.wide$D5toD6 <- togetRe.ave.wide$D5 - togetRe.ave.wide$D6
+    togetRe.ave.wide$F7toD6 <- togetRe.ave.wide$F7 - togetRe.ave.wide$D6
+    togetRe.ave.wide$M8toD6 <- togetRe.ave.wide$M8 - togetRe.ave.wide$D6
     
-    colnames(togetRe.mean)[c(2,5)] <- c("sample.B","Mean.B")
-    cols <- c("HMDBID","sample.B","Mean.B")
-    togetRe.mean.rep.full <- merge(togetRe.mean.rep2,togetRe.mean[,..cols],by = c("HMDBID","sample.B"))
-    togetRe.mean.rep.full$sample.B <- str_split_fixed(togetRe.mean.rep.full$sample.B,"_",4)[,4]
-    togetRe.mean.rep.full$dataset <- paste0(togetRe.mean.rep.full$sample.B,"to",togetRe.mean.rep.full$sample)
-    togetRe.mean.rep.full$re <- togetRe.mean.rep.full$Mean.B / togetRe.mean.rep.full$Mean
+    cols <- c("HMDBID","D5toD6","F7toD6","M8toD6")
+    togetRe.ave.long <- melt(togetRe.ave.wide[,..cols],id.vars = "HMDBID",
+                             variable.name = "dataset",value.name = "log2FC")
     
-    cols <- c("batchcode","HMDBID","dataset","re")
-    togetRe.withRef <- merge(togetRe.mean.rep.full[,..cols],RefDataset,by = c("dataset","HMDBID"))
-    togetRe.withRef$type <- ifelse(is.na(togetRe.withRef$batchcodes),"spike-ins","other\nmetabolites")
+    togetRe.withRef <- merge(togetRe.ave.long,RefDataset,by = c("dataset","HMDBID"))
+    togetRe.withRef$type <- ifelse(is.na(togetRe.withRef$SE),"spike-ins","other\nmetabolites")
     
-    CTR <- cor(togetRe.withRef$mean,togetRe.withRef$re,use = "pairwise.complete.obs")
+    CTR <- cor(togetRe.withRef$log2FCmedian,togetRe.withRef$log2FC,use = "pairwise.complete.obs",method = "spearman")
     togetRe.withRef$type <- factor(togetRe.withRef$type,levels = c("spike-ins","other\nmetabolites"))
 
-    scplot <- ggplot(togetRe.withRef, aes(x=mean, y=re, color=type, alpha = type))+
+    scplot <- ggplot(togetRe.withRef, aes(x=log2FCmedian, y=log2FC, color=type, alpha = type))+
         geom_point() + 
         scale_color_manual(values = c("other\nmetabolites" = "#999999","spike-ins"="#E41A1C"))+
-        scale_alpha_manual(values = c("other\nmetabolites" = 0.6,"spike-ins"=1)) +
+        scale_alpha_manual(values = c("other\nmetabolites" = 0.8,"spike-ins"= 0.9)) +
         theme(legend.position="right") +
-        scale_y_log10(limits = c(0.1,10))+ 
-        scale_x_log10(limits = c(0.1,10))+
+        scale_y_continuous(limits = c(-3,3))+ 
+        scale_x_continuous(limits = c(-3,3))+
         labs(x = "Ratios in reference datasets",
              y = "Measured ratios",
              color = "Metabolite type",alpha = "Metabolite type",

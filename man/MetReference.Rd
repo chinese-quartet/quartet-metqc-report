@@ -3,9 +3,9 @@
 \docType{data}
 \name{MetReference}
 \alias{MetReference}
-\title{Reference data of metabaolomics}
+\title{Reference data of metabolomics}
 \format{
-A \code{data.table} with 6 columns with 6 datasets combined.
+A \code{data.table} with 3 columns with 3 datasets combined.
 }
 \usage{
 MetReference

@@ -1,11 +1,10 @@
 Package: MetQC
 Type: Package
 Title: Quartet-based QCtools for Metabolomics
-Version: 0.3.5
+Version: 0.4.0
 Author: Naixin Zhang
 Maintainer: Naixin Zhang <nxzhang96@gmail.com>
 Description: Quartet-based QCtools for metbolomics studies. 
-    This package calculate SNR and export PCA plot.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
