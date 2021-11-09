@@ -32,6 +32,10 @@ GetPerformance <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL,
         output.path <- file.path(path,"output")
     } 
     
+    metadata <- metadata[metadata$sample %in% c("D5","D6","F7","M8"),]
+    cols <- c("metabolites","HMDBID",metadata$col_names)
+    dt <- dt[,..cols]
+    
     SNR <- CountSNR(dt=dt,metadata=metadata,output.path = output.path)
     CTR <- CountCTR(dt=dt,metadata=metadata,output.path = output.path)
     RMSE <- CountRMSE(dt=dt,metadata=metadata,output.path = output.path)
