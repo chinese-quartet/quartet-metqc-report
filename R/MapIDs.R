@@ -23,7 +23,8 @@ MapIDs <- function(dt.path=NULL, dt=NULL){
     names(map) <- MetInfo$metabolites
     
     dt[is.na(HMDBID)]$HMDBID <- map[dt[is.na(HMDBID)]$metabolites]
-    dt[is.na(HMDBID)]$HMDBID <- sprintf("Unknown%04s",171:nrow(dt[is.na(HMDBID)]))
-    
+    if(sum(is.na(dt$HMDBID))){
+        dt[is.na(HMDBID)]$HMDBID <- sprintf("Unknown%04s",171:(170+nrow(dt[is.na(HMDBID)])))
+    }
     return(dt)
 }
