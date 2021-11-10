@@ -1,6 +1,6 @@
 info:
   name: QC Report for Quartet Metabolomics
-  version: v0.1.1
+  version: v0.1.2
   description: Generate the QC Report for Quartet Metabolomics data.
   category: Report
   home: https://github.com/tservice-plugins/quartet-metqc-report

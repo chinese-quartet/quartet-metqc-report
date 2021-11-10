@@ -100,8 +100,6 @@ run <- function() {
 	library(MetQC)
 	print("Running...")
 	MetQC::GetPerformance(dt.path="$DATA_FILE", metadata.path="$META_FILE", output.path="$RESULT_DIR")
-  MetQC::CountSNR(dt.path="$DATA_FILE", metadata.path="$META_FILE", output.path="$RESULT_DIR")
-  MetQC::CountCTR(dt.path="$DATA_FILE", metadata.path="$META_FILE", output.path="$RESULT_DIR")
 }
 
 run()

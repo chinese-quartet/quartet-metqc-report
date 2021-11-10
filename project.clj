@@ -1,4 +1,4 @@
-(defproject tservice-plugins/quartet-metqc-report "v0.1.0"
+(defproject tservice-plugins/quartet-metqc-report "v0.1.2"
   :description "Visualizes Quality Control(QC) results for Quartet Project."
   :url "https://github.com/tservice-plugins/quartet-metqc-report"
   :license {:name "Eclipse Public License"
