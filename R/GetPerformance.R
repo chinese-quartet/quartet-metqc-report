@@ -52,8 +52,11 @@ GetPerformance <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL,
     dt.overall$Total <- apply(dt.overall[,..cols],1,function(x)mean(x,na.rm = T))
     
     GetClass <- function(aList){
+        quantiles <- quantile(aList, probs = seq(0,1,.25),na.rm = T)
+        H <- 1.5 * IQR(aList, na.rm = T)
+        cutoffs <- c(quantiles[1],quantiles[2]-H,quantiles[3],quantiles[4]+H,quantiles[5])
         result <- as.character(cut(aList,
-            breaks = quantile(aList, probs = seq(0,1,.25),na.rm = T), 
+            breaks = cutoffs, 
             include.lowest = T,labels = c("Bad","Fair","Good","Great")))
         return(result)
     }
