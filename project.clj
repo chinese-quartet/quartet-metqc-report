@@ -1,4 +1,4 @@
-(defproject tservice-plugins/quartet-metqc-report "v0.1.2"
+(defproject tservice-plugins/quartet-metqc-report "v0.1.3"
   :description "Visualizes Quality Control(QC) results for Quartet Project."
   :url "https://github.com/tservice-plugins/quartet-metqc-report"
   :license {:name "Eclipse Public License"
@@ -17,7 +17,7 @@
   {:provided
    {:dependencies
     [[org.clojure/clojure "1.10.1"]
-     [org.clojars.yjcyxky/tservice "0.5.8"]]}
+     [org.clojars.yjcyxky/tservice "0.6.0"]]}
 
    :uberjar
    {:auto-clean    true

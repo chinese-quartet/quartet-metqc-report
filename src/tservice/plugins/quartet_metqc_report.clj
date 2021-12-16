@@ -54,7 +54,7 @@
    {:name "quartet-metqc-report"
     :summary "Visualizes Quality Control(QC) results from metabolomics data for Quartet Project."
     :params-schema quartet-metqc-report-params-body
-    :handler (fn [{:keys [name data_file metadata_file description owner]
+    :handler (fn [{:keys [name data_file metadata_file description owner plugin-context]
                    :or {description (format "Quality control report for %s" name)}
                    :as payload}]
                (let [payload (merge {:description description} payload)
@@ -71,7 +71,7 @@
                                             :owner          owner
                                             :plugin-name    "quartet-metqc-report"
                                             :plugin-type    "ReportPlugin"
-                                            :plugin-version "v0.1.0"
+                                            :plugin-version (:plugin-version plugin-context)
                                             :response       response})
                      result-dir (fs-lib/join-paths workdir "results")]
                  (fs-lib/create-directories! result-dir)
@@ -88,7 +88,7 @@
                                              :description description
                                              :plugin-name "quartet-metqc-report"
                                              :plutin-type "ReportPlugin"
-                                             :plugin-version "v0.1.0"}})
+                                             :plugin-version (:plugin-version plugin-context)}})
                  response))
     :plugin-type :ReportPlugin
     :response-type :data2report}))
