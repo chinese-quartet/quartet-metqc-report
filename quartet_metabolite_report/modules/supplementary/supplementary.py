@@ -39,7 +39,7 @@ class MultiqcModule(BaseMultiqcModule):
         <h3 class='section-header black'>Methods</h3>
         <p>SNR was established to characterize the ability of a platform or lab or batch, which was able to distinguish intrinsic differences among distinct biological sample groups (“signal”) from variations in technical replicates of the same sample group ("noise").</p>
 
-        <p>Relative expression data (fold changes) were calculated for a total of six pairs of sample-to-sample comparisons (D6/D5, F7/D5, M8/D5, F7/D6, M8/D6, and M8/F7) among the Quartet samples. In order to improve the reliability of the reference values, genes that were satisfied with thresholds of p < 0.05 and detectable across the two samples in each sample pair were used.</p>
+        <p>Relative expression data (fold changes) were calculated for a total of three pairs of sample-to-sample comparisons (D5/D6, F7/D6 and M8/D6) among the Quartet samples. In order to improve the reliability of the reference values, metabolites that were satisfied with thresholds of p < 0.05 and detectable across the two samples in each sample pair were used.</p>
         </div>
       </div>
 

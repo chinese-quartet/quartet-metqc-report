@@ -65,8 +65,8 @@ class MultiqcModule(BaseMultiqcModule):
     # cycle over samples and add PC coordinates to data dict
     for s_name, d in self.corr_pca_data.items():
       data[s_name] = {
-        "x": d["mean"],
-        "y": d["re"],
+        "x": d["log2FCmedian"],
+        "y": d["log2FC"],
         "color": self.types[d["type"]]
       }
     
@@ -77,15 +77,15 @@ class MultiqcModule(BaseMultiqcModule):
         "title": "Scatter Plot Based on Reference Dataset",
         "xlab": "Relative metabolic profiles in reference dataset",
         "ylab": "Measured ratios between samples",
-        "marker_size": 3,
+        "marker_size": 5,
         "marker_line_width": 0,
       }
 
       self.add_section(
         name="",
         description = """Points are coloured as follows: 
-        <span style="color: #E41A1C;">Spike-ins</span>, 
-        <span style="color: #999999;">Other metabolites</span>.""",
+        <span style="color: #E41A1C;font-weight:bold">Spike-ins</span>, 
+        <span style="color: #999999;font-weight:bold">Other metabolites</span>.""",
         anchor="correlation-scatter",
         plot=scatter.plot(data, pconfig)
       )

@@ -40,11 +40,14 @@ def quartet_metabolite_report_execution_start():
 
   # Module-data_generation_information
   if 'data_generation_information/information' not in config.sp:
-    config.update_dict( config.sp, { 'data_generation_information/information': { 'fn_re': '^general_information.json$' } } )
+    config.update_dict( config.sp, { 'data_generation_information/information': { 'fn_re': '.*general_information.*.json$' } } )
   
   # Module-conclusion
-  if 'conclusion/table_met' not in config.sp:
-    config.update_dict( config.sp, { 'conclusion/table_met': { 'fn_re': '^PerformanceTable.csv$' } } )
+  if 'conclusion/conclusion_table' not in config.sp:
+    config.update_dict( config.sp, { 'conclusion/conclusion_table': { 'fn_re': '^conclusion_table.csv$' } } )
+  
+  if 'conclusion/rank_table' not in config.sp:
+    config.update_dict( config.sp, { 'conclusion/rank_table': { 'fn_re': '^rank_table.csv$' } } )
   
   # Module-snr
   if 'snr/table_met' not in config.sp:

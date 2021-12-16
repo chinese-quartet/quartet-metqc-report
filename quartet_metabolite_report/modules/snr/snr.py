@@ -24,7 +24,7 @@ class MultiqcModule(BaseMultiqcModule):
     
     # Initialise the parent module Class object
     super(MultiqcModule, self).__init__(
-      name='Signal-to-Noise Ratio (SNR)',
+      name='Signal-to-Noise Ratio',
       target='SNR',
       #anchor='snr',
       #href='https://github.com/clinico-omics/quartet-metabolite-report',
@@ -75,17 +75,17 @@ class MultiqcModule(BaseMultiqcModule):
         "title": "Principal components of Quartet samples (D5, D6, F7, M8)",
         "xlab": "PC1",
         "ylab": "PC2",
-        "marker_size": 8,
+        "marker_size": 7,
         "marker_line_width": 0,
       }
 
       self.add_section(
         name="",
         description = """Points are coloured as follows: 
-        <span style="color: #4CC3D9;">D5</span>, 
-        <span style="color: #7BC8A4;">D6</span>, 
-        <span style="color: #FFC65D;">F7</span>, 
-        <span style="color: #F16745;">M8</span>.""",
+        <span style="color: #4CC3D9;font-weight:bold">D5</span>, 
+        <span style="color: #7BC8A4;font-weight:bold">D6</span>, 
+        <span style="color: #FFC65D;font-weight:bold">F7</span>, 
+        <span style="color: #F16745;font-weight:bold">M8</span>.""",
         anchor="snr-pca",
         plot=scatter.plot(data, pconfig)
       )
