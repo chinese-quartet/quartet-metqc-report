@@ -1,16 +1,22 @@
 info:
   name: QC Report for Quartet Metabolomics
-  version: v0.1.3
+  version: v0.1.4
   description: Generate the QC Report for Quartet Metabolomics data.
   category: Report
-  home: https://github.com/tservice-plugins/quartet-metqc-report
-  source: PGx
+  home: https://github.com/chinese-quartet/quartet-metqc-report
+  source: Chinese Quartet
   short_name: quartet-metqc-report
   icons:
     - src: ""
       type: image/png
       sizes: 192x192
-  author: PGx
+  author: Jingcheng Yang
+  maintainers:
+    - Jingcheng Yang
+  tags:
+    - R
+    - Chart
+  readme: https://github.com/chinese-quartet/quartet-metqc-report/blob/master/README.md
 plugin:
   name: quartet-metqc-report
   display-name: QC Report for Quartet Metabolomics
@@ -18,11 +24,21 @@ plugin:
 init:
   # Unpack environment file to the directory, repository/envs/quartet-metqc-report
   - step: unpack-env
-    envname: quartet-metqc-report
-    postunpack: chmod a+x {{ENV_DEST_DIR}}/bin/metqc.sh
+    envtype: environment
+    envname: bin
+    postunpack: chmod a+x {{ENV_DIR}}/bin/metqc.sh
+  - step: unpack-env
+    envtype: environment
+    envname: renv
+  - step: unpack-env
+    envtype: environment
+    envname: requirements.txt
+  - step: unpack-env
+    envtype: environment
+    envname: renv.lock
   - step: load-namespace
-    namespace: tservice.plugins.quartet-metqc-report
+    namespace: quartet-metqc-report.core
   - step: register-plugin
-    entrypoint: tservice.plugins.quartet-metqc-report/metadata
+    entrypoint: quartet-metqc-report.core/metadata
   - step: init-event
-    entrypoint: tservice.plugins.quartet-metqc-report/events-init
+    entrypoint: quartet-metqc-report.core/events-init
