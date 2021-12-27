@@ -49,9 +49,7 @@
                                :plugin-name    "quartet-metqc-report"
                                :plugin-type    "ReportPlugin"
                                :plugin-version (:plugin-version plugin-context)
-                               :response       response})
-        result-dir (fs-lib/join-paths workdir "results")]
-    (fs-lib/create-directories! result-dir)
+                               :response       response})]
     (spit log-path (json/write-str {:status "Running"
                                     :msg ""}))
     (update-process! task-id 0)
@@ -67,8 +65,9 @@
                                 :plugin-version (:plugin-version plugin-context)}})
     response))
 
-(defn- make-report!
+(defn make-report!
   [{:keys [data-file metadata-file dest-dir metadata task-id]}]
+  (fs-lib/create-directories! (fs-lib/join-paths dest-dir "results"))
   (let [log-path (fs-lib/join-paths dest-dir "log")
         result-dir (fs-lib/join-paths dest-dir "results")
         parameters-file (fs-lib/join-paths result-dir "general_information.json")

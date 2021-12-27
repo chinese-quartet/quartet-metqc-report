@@ -10,3 +10,7 @@ pom.xml.asc
 .hgignore
 .hg/
 .clj-kondo
+quartet_metabolite_report.egg-info
+dist
+metqc.tar.gz
+.env

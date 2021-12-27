@@ -1,34 +1,39 @@
 # quartet-metqc-report
 
-FIXME: description
+Visualizes Quality Control(QC) results for Quartet Project.
 
-## Installation
+## Installation (Standlone Mode)
 
-Download from http://example.com/FIXME.
+```
+# Clone the repo
+git clone https://github.com/chinese-quartet/quartet-metqc-report
+
+cd quartet-metqc-report
+
+# Build the environment and compile the quartet-metqc-report
+make
+```
 
 ## Usage
 
-FIXME: explanation
+```bash
+source .env/bin/activate
+java -jar target/uberjar/quartet-metqc-report-*-standalone.jar -h
+```
 
-## Options
+## Installation (Plugin Mode)
 
-FIXME: listing of options this app accepts.
+```bash
+copm-cli install -n quartet-metqc-report -V v0.1.2 -d plugins
+```
 
 ## Examples
 
 ...
 
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
-Copyright © 2021 FIXME
+Copyright © 2021
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
