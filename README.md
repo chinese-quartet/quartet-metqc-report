@@ -2,6 +2,14 @@
 
 Visualizes Quality Control(QC) results for Quartet Project.
 
+## Prerequisite
+
+- Bash
+- Python3 >= 3.7
+- virtualenv
+- pip3
+- R >= 3.6.3
+
 ## Installation (Standlone Mode)
 
 ```
