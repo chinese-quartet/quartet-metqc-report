@@ -2,15 +2,15 @@
 
 Visualizes Quality Control(QC) results for Quartet Project.
 
-## Prerequisite
+## Standlone Mode
+### Prerequisite
 
 - Bash
 - Python3 >= 3.7
 - virtualenv
 - pip3
 - R >= 3.6.3
-
-## Installation (Standlone Mode)
+### Installation
 
 ```
 # Clone the repo
@@ -22,14 +22,20 @@ cd quartet-metqc-report
 make
 ```
 
-## Usage
+### Usage
 
 ```bash
 source .env/bin/activate
 java -jar target/uberjar/quartet-metqc-report-*-standalone.jar -h
 ```
 
-## Installation (Plugin Mode)
+## Plugin Mode
+
+### Prerequisite
+
+Please access [Quartet Service](https://github.com/chinese-quartet/quartet-service) for more details 
+
+### Installation
 
 ```bash
 copm-cli install -n quartet-metqc-report -V v0.1.2 -d plugins
