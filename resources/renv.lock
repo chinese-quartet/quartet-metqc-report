@@ -32,15 +32,16 @@
     },
     "MetQC": {
       "Package": "MetQC",
-      "Version": "0.4.2",
+      "Version": "0.4.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "MetQC",
+      "RemoteRepo": "quartet-metqc-report",
       "RemoteUsername": "chinese-quartet",
-      "RemoteRef": "v0.4.2",
-      "RemoteSha": "0732c1ec6848345dc6e017b2b2f9cfc0dffc8585",
-      "Hash": "303bc2255a008eefb92e1b11ab17f191"
+      "RemoteRef": "HEAD",
+      "RemoteSha": "da43771566c24018bc54223f55403a289e569770",
+      "RemoteSubdir": "metqc",
+      "Hash": "7870213411b5c32b201a3b21422f6cc1"
     },
     "R6": {
       "Package": "R6",
