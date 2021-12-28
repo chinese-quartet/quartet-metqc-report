@@ -1,5 +1,0 @@
-include Makefile CHANGES.rst CONTRIBUTING.rst LICENSE AUTHORS config.py LICENSE.md
-
-recursive-include quartet_metabolite_report *
-
-global-exclude *.py[co] .DS_Store

@@ -39,6 +39,11 @@ copm-cli install -n quartet-metqc-report -V v0.1.2 -d plugins
 
 ...
 
+## Contributions
+
+- [MetQC](./metqc) developed by [Naixin Zhang](https://github.com/nxzhang)
+- [MultiReport](./report) developed by [Yaqing Liu](https://github.com/lyaqing)
+
 ## License
 
 Copyright © 2021
