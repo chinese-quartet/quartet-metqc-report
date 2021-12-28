@@ -2,7 +2,7 @@
 
 Visualizes Quality Control(QC) results for Quartet Project.
 
-## Standlone Mode
+## Standalone Mode
 ### Prerequisite
 
 - Bash
