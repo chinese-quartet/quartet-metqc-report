@@ -33,7 +33,12 @@
   :test-paths ["test"]
 
   :profiles
-  {:uberjar
+  {:provided
+   {:dependencies
+    [[org.clojure/clojure "1.10.1"]
+     [com.github.yjcyxky/tservice-core "0.2.0"]]}
+
+   :uberjar
    {:dependencies
     [[org.clojure/clojure "1.10.1"]
      [com.github.yjcyxky/tservice-core "0.2.0"]]
