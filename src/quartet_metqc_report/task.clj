@@ -1,7 +1,7 @@
 (ns quartet-metqc-report.task
   (:require [quartet-metqc-report.metqc :as metqc]
             [local-fs.core :as fs-lib]
-            [tservice-core.plugins.env :refer [add-env-to-path create-task! update-task!]]
+            [tservice-core.plugins.env :refer [make-remote-link  add-env-to-path create-task! update-task!]]
             [tservice-core.plugins.util :as util]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
@@ -31,18 +31,20 @@
   (update-process! task-id process))
 
 (defn post-handler
-  [{{:keys [name data_file metadata_file description owner plugin-context]
-     :or {description (format "Quality control report for %s" name)}
-     :as payload} :body}]
-  (log/info (format "Create a report %s with %s" name payload))
-  (let [payload (merge {:description description} payload)
+  [{:keys [body owner plugin-context uuid workdir]
+    :as payload}]
+  (log/info (format "Create a report with %s" payload))
+  (let [{:keys [name data_file metadata_file description]
+         :or {description (format "Quality control report for %s" name)}} body
+        payload (merge {:description description} (:body payload))
         data-file (metqc/correct-filepath data_file)
         metadata-file (metqc/correct-filepath metadata_file)
         workdir (fs-lib/dirname data-file)
         log-path (fs-lib/join-paths workdir "log")
-        response {:report (format "%s/multiqc_report.html" workdir)
-                  :log log-path}
-        task-id (create-task! {:name           name
+        response {:report (make-remote-link (format "%s/multiqc_report.html" workdir))
+                  :log (make-remote-link log-path)}
+        task-id (create-task! {:id             uuid
+                               :name           name
                                :description    description
                                :payload        payload
                                :owner          owner

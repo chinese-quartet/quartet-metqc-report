@@ -36,12 +36,12 @@
   {:provided
    {:dependencies
     [[org.clojure/clojure "1.10.1"]
-     [com.github.yjcyxky/tservice-core "0.2.0"]]}
+     [com.github.yjcyxky/tservice-core "0.2.2"]]}
 
    :uberjar
    {:dependencies
     [[org.clojure/clojure "1.10.1"]
-     [com.github.yjcyxky/tservice-core "0.2.0"]]
+     [com.github.yjcyxky/tservice-core "0.2.2"]]
     :aot           :all
     :omit-source   false
     :target-path   "target/%s"
