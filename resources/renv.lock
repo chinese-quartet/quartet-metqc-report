@@ -39,9 +39,9 @@
       "RemoteRepo": "quartet-metqc-report",
       "RemoteUsername": "chinese-quartet",
       "RemoteRef": "HEAD",
-      "RemoteSha": "da43771566c24018bc54223f55403a289e569770",
+      "RemoteSha": "4ac924656eccab4a431549f702e4b37a6f700e35",
       "RemoteSubdir": "metqc",
-      "Hash": "7870213411b5c32b201a3b21422f6cc1"
+      "Hash": "9c189b45daf899ba788480b6425a0c09"
     },
     "R6": {
       "Package": "R6",

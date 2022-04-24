@@ -36,6 +36,9 @@ init:
   - step: unpack-env
     envtype: environment
     envname: renv.lock
+  - step: unpack-env
+    envtype: environment
+    envname: .Rprofile
   - step: load-namespace
     namespace: quartet-metqc-report.core
   - step: register-plugin
