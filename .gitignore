@@ -14,3 +14,4 @@ quartet_metabolite_report.egg-info
 dist
 metqc.tar.gz
 .env
+.DS_Store
