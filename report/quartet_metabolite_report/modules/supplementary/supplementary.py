@@ -25,11 +25,7 @@ class MultiqcModule(BaseMultiqcModule):
     
     # Initialise the parent module Class object
     super(MultiqcModule, self).__init__(
-      name='Supplementary',
-      target='',
-      #anchor='supplementary',
-      #href='https://github.com/clinico-omics/quartet-metabolite-report',
-      #info=''
+      name='Supplementary'
     )
     
     html = '''
@@ -37,9 +33,12 @@ class MultiqcModule(BaseMultiqcModule):
       <div class='methods'>
         <div class='small-12 columns'>
         <h3 class='section-header black'>Methods</h3>
-        <p>SNR was established to characterize the ability of a platform or lab or batch, which was able to distinguish intrinsic differences among distinct biological sample groups (“signal”) from variations in technical replicates of the same sample group ("noise").</p>
+        
+        <p><b>1. Signal-to-Noise Ratio (SNR)</b>: SNR was established to characterize the ability of a platform or lab or batch, which was able to distinguish intrinsic differences among distinct biological sample groups ("signal") from variations in technical replicates of the same sample group ("noise").</p>
 
-        <p>Relative expression data (fold changes) were calculated for a total of three pairs of sample-to-sample comparisons (D5/D6, F7/D6 and M8/D6) among the Quartet samples. In order to improve the reliability of the reference values, metabolites that were satisfied with thresholds of p < 0.05 and detectable across the two samples in each sample pair were used.</p>
+        <p><b>2. Relative Correlation with Reference Datasets (RC)</b>: RC is used for assessment of quantitative consistency with the reference datasets (RDs) at relative levels. To evaluate the performance of both targeted and untargeted metabolomics, the RDs was established with historical datasets by benchmarking the relative abundance values for each sample pair (D5/D6, F7/D6, M8/D6) at metabolite levels. We calculate relative abundance values (ratios to D6) of the queried data for metabolites overlapped with the RDs. Then we calculate the Pearson correlation of measured relative abundance values and those in the RDs.</p>
+
+        <p><b>3. Recall of DAMs in Reference Datasets (Recall)</b>: Recall is used for qualitative assessment of the accuracy of biological difference detecting, as the fraction of the differential abundancial metabolites (DAMs) in RDs that are successfully retrieved. Here recall is the number of measured DAMs (p < 0.05, t test) divided by the number of DAMs should be identified as RDs.</p>
         </div>
       </div>
       

@@ -15,19 +15,21 @@ setup(
   description = 'MultiReport for Quartet Metabolomics QC.',
   long_description = __doc__,
   keywords = 'bioinformatics',
-  url = 'https://github.com/clinico-omics/quartet-metabolite-report',
-  download_url = 'https://github.com/clinico-omics/quartet-metabolite-report/releases',
+  url = 'https://github.com/chinese-quartet/quartet-metqc-report',
+  download_url = 'https://github.com/chinese-quartet/quartet-metqc-report/releases',
   license = 'MIT',
   packages = find_packages(),
   include_package_data = True,
   install_requires = [
     'multiqc==1.11',
     'plotly==4.9.0',
-    'pandas==1.1.0'
+    'pandas==1.2.4',
+    'seaborn==0.11.2',
+    'Cython==0.29.28'
   ],
   entry_points = {
     'multiqc.modules.v1': [
-      'data_generation_information = quartet_metabolite_report.modules.data_generation_information:MultiqcModule',
+      'general_information = quartet_metabolite_report.modules.general_information:MultiqcModule',
       'conclusion = quartet_metabolite_report.modules.conclusion:MultiqcModule',
       'snr = quartet_metabolite_report.modules.snr:MultiqcModule',
       'correlation = quartet_metabolite_report.modules.correlation:MultiqcModule',
@@ -40,7 +42,7 @@ setup(
       'disable_plugin = quartet_metabolite_report.cli:disable_plugin'
     ],
     'multiqc.templates.v1': [
-      'quartet_metabolite_report = quartet_metabolite_report.templates.default'
+      'report_templates = quartet_metabolite_report.templates.default'
     ]
   },
   classifiers = [

@@ -38,9 +38,9 @@ def quartet_metabolite_report_execution_start():
   # so we check whether the value is already set. This is to avoid
   # clobbering values that have been customised by users.
 
-  # Module-data_generation_information
-  if 'data_generation_information/information' not in config.sp:
-    config.update_dict( config.sp, { 'data_generation_information/information': { 'fn_re': '.*general_information.*.json$' } } )
+  # Module-general_information
+  if 'general_information/information' not in config.sp:
+    config.update_dict( config.sp, { 'general_information/information': { 'fn_re': '^general_information.json$' } } )
   
   # Module-conclusion
   if 'conclusion/conclusion_table' not in config.sp:
@@ -49,13 +49,16 @@ def quartet_metabolite_report_execution_start():
   if 'conclusion/rank_table' not in config.sp:
     config.update_dict( config.sp, { 'conclusion/rank_table': { 'fn_re': '^rank_table.csv$' } } )
   
+  if 'conclusion/cutoff_table' not in config.sp:
+    config.update_dict( config.sp, { 'conclusion/cutoff_table': { 'fn_re': '^cutoff_table.csv$' } } )
+  
   # Module-snr
   if 'snr/table_met' not in config.sp:
-    config.update_dict( config.sp, { 'snr/table_met': { 'fn_re': '^PCAtable.csv$' } } )
+    config.update_dict( config.sp, { 'snr/table': { 'fn_re': '^PCAtable.csv$' } } )
   
   # Module-correlation
   if 'correlation/table_met' not in config.sp:
-    config.update_dict( config.sp, { 'correlation/table_met': { 'fn_re': '^CTRtable.csv$' } } )  
+    config.update_dict( config.sp, { 'correlation/table': { 'fn_re': '^RCtable.csv$' } } )
   
-  config.module_order = ['data_generation_information', 'conclusion', 'snr', 'correlation', 'supplementary']
+  config.module_order = ['general_information', 'conclusion', 'snr', 'correlation', 'supplementary']
   config.log_filesize_limit = 2000000000
