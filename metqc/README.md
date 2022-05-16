@@ -35,14 +35,19 @@ GetPerformance(dt=sample_data,metadata=sample_metadata)
 
 ## Count SNR and plot related PCA plot
 CountSNR(dt=sample_data,metadata=sample_metadata)
-#> [1] 16.31711
+#> [1] 4.511966
 
-## Count CTR and plot related scatter plot
-CountCTR(dt=sample_data,metadata=sample_metadata)
-#> [1] 0.952429
+## Count RC and plot related scatter plot
+CountRC(dt=sample_data,metadata=sample_metadata)
+#> [1] 0.7628635
+
+## Count Recall 
+CountRecall(dt=sample_data,metadata=sample_metadata)
+#> [1] 0.4646465
 
 ### The output directory can also be assigned.
 # GetPerformance(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
 # CountSNR(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
-# CountCTR(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
+# CountRC(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
+# CountRecall(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
 ```
