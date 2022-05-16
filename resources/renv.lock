@@ -30,19 +30,6 @@
       "Repository": "CRAN",
       "Hash": "08588806cba69f04797dab50627428ed"
     },
-    "MetQC": {
-      "Package": "MetQC",
-      "Version": "0.4.3",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "quartet-metqc-report",
-      "RemoteUsername": "chinese-quartet",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "4ac924656eccab4a431549f702e4b37a6f700e35",
-      "RemoteSubdir": "metqc",
-      "Hash": "9c189b45daf899ba788480b6425a0c09"
-    },
     "R6": {
       "Package": "R6",
       "Version": "2.5.1",
