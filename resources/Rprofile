@@ -1,0 +1,11 @@
+renv::activate("<plugin_env_path>");
+renv::restore();
+pkgTest <- function(x) {
+  if (!require(x,character.only = TRUE))
+  {
+    renv::install("chinese-quartet/quartet-metqc-report/metqc")
+    if(!require(x,character.only = TRUE)) stop("Package not found")
+  }
+}
+
+pkgTest("metqc")

@@ -39,6 +39,10 @@ init:
   - step: unpack-env
     envtype: environment
     envname: .Rprofile
+  - step: unpack-env
+    envtype: environment
+    envname: Rprofile
+    postunpack: sed -i 's#<plugin_env_path>#{{ ENV_DIR }}#g' {{ ENV_DIR }}/Rprofile
   - step: load-namespace
     namespace: quartet-metqc-report.core
   - step: register-plugin
