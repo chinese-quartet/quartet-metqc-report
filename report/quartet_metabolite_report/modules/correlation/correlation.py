@@ -58,7 +58,7 @@ class MultiqcModule(BaseMultiqcModule):
     max_value = max([fig_data['logFC.Test'].max(), fig_data['logFC.Reference'].max()])
     
     tick = max(abs(min_value), abs(max_value))
-
+    
     fig = px.scatter(fig_data,
           x = 'logFC.Test', y = 'logFC.Reference',
           title = title,

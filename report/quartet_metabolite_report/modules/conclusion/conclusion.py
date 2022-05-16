@@ -190,7 +190,7 @@ class MultiqcModule(BaseMultiqcModule):
       
       * The total score is the geometric mean of the scaled values of the number of Signal-to-Noise Ratio (SNR), relative correlation with reference datasets (RC), and recall of DAMs in Reference Datasets (Recall).
       * For better comparison and presentation, the total score was scaled to the interval [1, 10], with the worst dataset being 1 and the best dataset scoring 10.
-
+      
       **Four levels of performance:**
       
       Based on the scaled total score, the submitted data will be ranked together with all Quartet historical datasets. The higher the score, the higher the ranking. After this, the performance levels will be assigned based on their ranking ranges.
