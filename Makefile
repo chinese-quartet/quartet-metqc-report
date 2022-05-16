@@ -15,7 +15,7 @@ make-env:
 install-report:
 	cd report && ../.env/bin/python3 setup.py sdist && ../.env/bin/pip3 install dist/*.tar.gz
 
-install-protqc:
+install-metqc:
 	@Rscript -e 'install.packages("renv", repos="http://cran.us.r-project.org")'
 	cp -R resources/* .env/
 	@echo 'renv::activate(".env"); renv::restore();' > .env/Rprofile
