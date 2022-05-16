@@ -19,8 +19,8 @@ To use this plugin, you need to install MultiQC and install `quartet-metabolite-
 pip install multiqc
 
 # Install quartet-metabolite-report
-git clone https://github.com/clinico-omics/quartet-metabolite-report.git
-cd quartet-metabolite-report
+git clone https://github.com/chinese-quartet/quartet-metqc-report.git
+cd report/quartet-metabolite-report
 python setup.py install
 ```
 
@@ -42,8 +42,8 @@ If you're developing this code, you'll want to clone it locally and install
 it manually instead of using `pip`:
 
 ```shell
-git clone https://github.com/clinico-omics/quartet-metabolite-report.git
-cd quartet-metabolite-report
+git clone https://github.com/chinese-quartet/quartet-metqc-report.git
+cd report/quartet-metabolite-report
 # You don't need to rerun the installation every time you make an edit (though you still do if you change anything in setup.py).
 python setup.py develop
 ```

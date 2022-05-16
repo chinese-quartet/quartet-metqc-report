@@ -21,7 +21,7 @@ set -o pipefail
 show_help() {
 	cat <<EOF
 usage: $(echo $0) [-d <DATA_FILE>] [-m <META_FILE>] [-o <RESULT_DIR>]
-       -d DATA_FILE Proteomics profiled data.
+       -d DATA_FILE Metabolomics profiled data.
        -m META_FILE Metadata file.
        -o RESULT_DIR A directory for result files.
 EOF
