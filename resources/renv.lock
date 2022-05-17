@@ -3,10 +3,6 @@
     "Version": "3.6.3",
     "Repositories": [
       {
-        "Name": "MRAN",
-        "URL": "https://mran.microsoft.com"
-      },
-      {
         "Name": "CRAN",
         "URL": "https://cloud.r-project.org"
       }
@@ -53,6 +49,14 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "45f0398006e83a5b10b72a90663d8d8c",
+      "Requirements": []
+    },
+    "Rcpp": {
+      "Package": "Rcpp",
+      "Version": "1.0.8.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "32e79b908fda56ee57fe518a8d37b864",
       "Requirements": []
     },
     "boot": {
@@ -335,6 +339,16 @@
       "Hash": "01f28d4278f15c76cddbea05899c5d6f",
       "Requirements": []
     },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9c17c6ee41639ebdc1d7266546d3b627",
+      "Requirements": [
+        "Rcpp"
+      ]
+    },
     "purrr": {
       "Package": "purrr",
       "Version": "0.3.4",
@@ -353,6 +367,18 @@
       "Repository": "CRAN",
       "Hash": "c1078316e1d4f70275fc1ea60c0bc431",
       "Requirements": []
+    },
+    "reshape2": {
+      "Package": "reshape2",
+      "Version": "1.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bb5996d0bd962d214a11140d77589917",
+      "Requirements": [
+        "Rcpp",
+        "plyr",
+        "stringr"
+      ]
     },
     "rlang": {
       "Package": "rlang",
