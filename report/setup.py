@@ -5,7 +5,7 @@ MultiReport for Quartet Metabolomics QC
 
 from setuptools import setup, find_packages
 
-version = '1.1.1'
+version = '0.2.1'
 
 setup(
   name = 'quartet_metabolite_report',

@@ -8,4 +8,4 @@ pkgTest <- function(x) {
   }
 }
 
-pkgTest("metqc")
+pkgTest("MetQC")
