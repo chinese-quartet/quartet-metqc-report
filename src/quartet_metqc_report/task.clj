@@ -89,16 +89,17 @@
                                      (fn []
                                        (update-process! task-id 80)
                                        (metqc/multiqc result-dir dest-dir
-                                                      {:template "quartet_metabolite_report"
+                                                      {:template "report_templates"
                                                        :title "Quartet Report for Metabolomics"
                                                        :env {:PATH (add-env-to-path "quartet-metqc-report")}}))]
                                     (fn [result] (= (:status result) "Success")))
         status (:status (last results))
         msg (apply str (map :msg results))
-        process (if (= status "Success") 100 -1)]
-    (log/info (format "Running batch command: %s" (pr-str results)))
-    (update-log-process! log-path {:status status
-                                   :msg msg}
+        process (if (= status "Success") 100 -1)
+        output {:status status
+                :msg msg}]
+    (log/debug (format "Running batch command: %s" (pr-str results)))
+    (update-log-process! log-path output
                          task-id process)))
 
 (def events-init

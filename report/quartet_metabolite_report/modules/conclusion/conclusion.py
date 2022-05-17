@@ -53,6 +53,7 @@ class MultiqcModule(BaseMultiqcModule):
       content = pd.read_csv(f_p)#.replace(r'\\u00b1', '±', regex=True)
       content.columns = ['Quality Metrics', 'Value', 'Historical Value (mean ± SD)', 'Rank', 'Performance']
       table_summary_dic = content.set_index('Quality Metrics').T.to_dict()
+      print(table_summary_dic)
     if len(table_summary_dic) != 0:
       self.plot_summary_table('conclusion_summary', table_summary_dic, cutoff_table)
     else:

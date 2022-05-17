@@ -13,9 +13,9 @@
 #' @importFrom data.table :=
 #' @importFrom data.table setDT
 #' @importFrom dplyr group_by
-#' @importFrom rstatix %>%	
-#' @importFrom rstatix pairwise_t_test
-#' @importFrom rstatix adjust_pvalue
+#' @importFrom dplyr %>%	
+#' @importFrom stats pairwise.t.test
+#' @importFrom stats p.adjust
 #'
 #' @examples
 #' CountRecall(dt=sample_data,metadata=sample_metadata)
@@ -54,7 +54,7 @@ CountRecall <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt
     mets.hmdb <- unique(dt.long.info.log2$HMDBID)
     dt.log2.stat <- dt.long.info.log2 %>%
         group_by(HMDBID) %>%
-        pairwise_t_test(formula = value~sample, p.adjust.method = "holm")
+        pairwise.t.test(formula = value~sample, p.adjust.method = "holm")
     setDT(dt.log2.stat)
     
     # get log2FC of specific sample pairs (relative to D6)
@@ -64,7 +64,7 @@ CountRecall <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt
     dt.log2.stat$mean2 <- sapply(1:nrow(dt.log2.stat),function(x){
         mean(dt.long.info.log2[HMDBID == dt.log2.stat[x,]$HMDBID & sample == dt.log2.stat[x,]$group2,]$value)
     })
-    dt.log2.stat$p.adj2 <- adjust_pvalue(dt.log2.stat$p, method = "holm")
+    dt.log2.stat$p.adj2 <- p.adjust(dt.log2.stat$p, method = "holm")
     dt.log2.stat$log2FC <- dt.log2.stat$mean1 - dt.log2.stat$mean2
     
     dt.log2.stat.D6 <- dt.log2.stat[group1 == "D6" |group2 == "D6", ]
