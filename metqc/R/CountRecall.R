@@ -8,14 +8,10 @@
 #'
 #' @return Numeric vector
 #' @importFrom data.table data.table
-#' @importFrom data.table melt
+#' @importFrom reshape2 melt
 #' @importFrom data.table copy
 #' @importFrom data.table :=
 #' @importFrom data.table setDT
-#' @importFrom dplyr group_by
-#' @importFrom rstatix %>%	
-#' @importFrom rstatix pairwise_t_test
-#' @importFrom rstatix adjust_pvalue
 #'
 #' @examples
 #' CountRecall(dt=sample_data,metadata=sample_metadata)
@@ -50,31 +46,30 @@ CountRecall <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt
     dt.long.info.log2 <- copy(dt.long.info)
     dt.long.info.log2$value <- log2(dt.long.info.log2$value)
     
-    # pairwise t test (rstatix)
+    # pairwise t test (default)
     mets.hmdb <- unique(dt.long.info.log2$HMDBID)
-    dt.log2.stat <- dt.long.info.log2 %>%
-        group_by(HMDBID) %>%
-        pairwise_t_test(formula = value~sample, p.adjust.method = "holm")
-    setDT(dt.log2.stat)
+    dt.long.info.log2$sample <- factor(dt.long.info.log2$sample,levels = c("D6","D5","F7","M8"))
+    dt.log2.stat <- rbindlist(lapply(mets.hmdb,function(xMet){
+        dt.sub <- dt.long.info.log2[HMDBID == xMet,]
+        
+        if (sd(dt.sub$value) == 0) {
+            return(NULL)
+        }
+        
+        dt.ttest <- pairwise.t.test(x=dt.sub$value,g=dt.sub$sample, p.adjust.method = "none")
+        dt.ttest.df <- reshape2::melt(dt.ttest$p.value)
+        dt.ttest.df.rmNA <- dt.ttest.df[complete.cases(dt.ttest.df),]
+        colnames(dt.ttest.df.rmNA) <- c("group1","group2","p")
+        dt.ttest.df.rmNA$p.adj <- p.adjust(dt.ttest.df.rmNA$p,method = "holm")
+        dt.ttest.df.rmNA$HMDBID <- xMet
+        return(dt.ttest.df.rmNA)
+    }))
+    dt.log2.stat$p.adj2 <- p.adjust(dt.log2.stat$p,method = "fdr")
     
-    # get log2FC of specific sample pairs (relative to D6)
-    dt.log2.stat$mean1 <- sapply(1:nrow(dt.log2.stat),function(x){
-        mean(dt.long.info.log2[HMDBID == dt.log2.stat[x,]$HMDBID & sample == dt.log2.stat[x,]$group1,]$value)
-    })
-    dt.log2.stat$mean2 <- sapply(1:nrow(dt.log2.stat),function(x){
-        mean(dt.long.info.log2[HMDBID == dt.log2.stat[x,]$HMDBID & sample == dt.log2.stat[x,]$group2,]$value)
-    })
-    dt.log2.stat$p.adj2 <- adjust_pvalue(dt.log2.stat$p, method = "holm")
-    dt.log2.stat$log2FC <- dt.log2.stat$mean1 - dt.log2.stat$mean2
-    
-    dt.log2.stat.D6 <- dt.log2.stat[group1 == "D6" |group2 == "D6", ]
-    dt.log2.stat.D6$dataset <- ""
-    dt.log2.stat.D6[group1 == "D6"]$dataset <- paste0(dt.log2.stat.D6[group1 == "D6"]$group2,"to","D6")
-    dt.log2.stat.D6[group2 == "D6"]$dataset <- paste0(dt.log2.stat.D6[group2 == "D6"]$group1,"to","D6")
-    
-    dt.log2.stat.D6$log2FC <- 0
-    dt.log2.stat.D6[group1 == "D6"]$log2FC <- dt.log2.stat.D6[group1 == "D6"]$mean2 - dt.log2.stat.D6[group1 == "D6"]$mean1
-    dt.log2.stat.D6[group2 == "D6"]$log2FC <- dt.log2.stat.D6[group2 == "D6"]$mean1 - dt.log2.stat.D6[group2 == "D6"]$mean2
+    # get adjusted p of specific sample pairs (relative to D6)
+    dt.log2.stat.D6 <- dt.log2.stat[group2 == "D6", ]
+    dt.log2.stat.D6$dataset <-  paste0(dt.log2.stat.D6$group1,"to",dt.log2.stat.D6$group2)
+    dt.log2.stat.D6.sig <- dt.log2.stat.D6[p.adj2 < 0.05,]
     
     # detected DAMs in RDs
     dt.log2.stat.D6.inRD <- merge(dt.log2.stat.D6,MetReference,by=c("HMDBID","dataset"))

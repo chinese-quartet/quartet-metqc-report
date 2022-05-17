@@ -39,11 +39,11 @@ CountSNR(dt=sample_data,metadata=sample_metadata)
 
 ## Count RC and plot related scatter plot
 CountRC(dt=sample_data,metadata=sample_metadata)
-#> [1] 0.7628635
+#> [1] 0.7637139
 
 ## Count Recall 
 CountRecall(dt=sample_data,metadata=sample_metadata)
-#> [1] 0.4646465
+#> [1] 0.1649485
 
 ### The output directory can also be assigned.
 # GetPerformance(output.path = [Your Path],dt=sample_data,metadata=sample_metadata)
