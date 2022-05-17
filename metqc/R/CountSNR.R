@@ -11,7 +11,7 @@
 #' @importFrom data.table fread
 #' @importFrom data.table data.table
 #' @importFrom data.table rbindlist
-#' @importFrom data.table melt
+#' @importFrom reshape2 melt
 #' @importFrom data.table setDT
 #' @importFrom data.table :=
 #' @importFrom ggplot2 ggplot
@@ -41,8 +41,10 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
     
     cols <- metadata$col_names
     setkey(setDT(metadata),col_names)
-    dt.num <- subset(x = dt,select = cols)
-    dt.num.t.cp <- t(data.frame(dt.num[complete.cases(dt.num),]))
+    dt.num.0 <- dt[,..cols]
+    dt.num.0[dt.num.0 == 0] <- NA
+    dt.num.log2 <- apply(dt.num.0, 2, function(x)log2(x))
+    dt.num.t.cp <- t(data.frame(dt.num.log2[complete.cases(dt.num.log2),]))
 
     pca_prcomp <- prcomp(x = dt.num.t.cp,scale. = T)
 
@@ -82,7 +84,7 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
              title=sprintf("SNR = %.2f", signoise_db))+
         theme(plot.title = element_text(hjust=0.5,size=12))+
         scale_color_manual(values=colors.Quartet) +
-        theme(legend.position = "bottom")
+        theme(legend.position = "right")
     
     
     if(is.null(output.path)){
@@ -94,7 +96,7 @@ CountSNR <- function(dt.path=NULL, metadata.path=NULL, output.path = NULL, dt=NU
     
     write.csv(x = dt.forPlot,file = file.path(output.path,"PCAtable.csv"),row.names = F)
     ggsave(filename = file.path(output.path,"PCA_withSNR.png"),pcaplot,
-           device = "png",width = 8.8,height = 8,units = c( "cm"),dpi = 300)
+           device = "png",width = 10,height = 8,units = c( "cm"),dpi = 300)
     return(signoise_db)
 }
 
