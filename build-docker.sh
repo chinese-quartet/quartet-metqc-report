@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+VERSION=$(git describe --tags `git rev-list --tags --max-count=1` --always)
 
 # dynamically pull more interesting stuff from latest git commit
 HASH=$(git show-ref --head --hash=8 head)  # first 8 letters of hash should be enough; that's what GitHub uses
