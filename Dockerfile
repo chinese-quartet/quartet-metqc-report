@@ -7,6 +7,7 @@ FROM adoptopenjdk/openjdk8:x86_64-debianslim-jre8u345-b01 as builder
 
 WORKDIR /app/source
 
+ENV PATH="$PATH:/opt/conda/bin"
 ENV FC_LANG en-US
 ENV LC_CTYPE en_US.UTF-8
 
@@ -20,10 +21,20 @@ RUN apt-get update && apt-get install -y coreutils bash git wget make gettext
 # lein:    backend dependencies and building
 ADD ./bin/lein /usr/local/bin/lein
 RUN chmod 744 /usr/local/bin/lein
-RUN lein upgrade
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py37_22.11.1-1-Linux-x86_64.sh -O miniconda.sh && bash miniconda.sh -b -p /opt/conda
+RUN /opt/conda/bin/conda install -c conda-forge -c bioconda -y python=3.9 r-base=4.1.2 r-renv blas lapack cxx-compiler
+ADD ./resources/requirements.txt /data/requirements.txt
+ADD ./bin/quartet-metqc-report /opt/conda/bin/quartet-metqc-report
+RUN /opt/conda/bin/pip install -r /data/requirements.txt
+
+ADD ./resources/bin/metqc.sh /opt/conda/bin/metqc.sh
+ADD ./resources/renv /opt/conda/renv
+ADD ./resources/renv.lock /opt/conda/renv.lock
+ADD ./build/Rprofile /opt/conda/etc/Rprofile
+RUN Rscript /opt/conda/etc/Rprofile
 
 # install dependencies before adding the rest of the source to maximize caching
-
 # backend dependencies
 ADD project.clj .
 RUN lein deps
@@ -57,20 +68,11 @@ RUN echo "**** Install dev packages ****" && \
     \
     echo "**** Cleanup ****" && \
     apt-get clean
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py37_22.11.1-1-Linux-x86_64.sh -O miniconda.sh && bash miniconda.sh -b -p /opt/conda
-RUN /opt/conda/bin/conda install -c conda-forge -c bioconda -y python=3.9 r-base=3.6.3 r-renv
-ADD ./resources/requirements.txt /data/requirements.txt
-ADD ./bin/quartet-metqc-report /opt/conda/bin/quartet-metqc-report
-RUN /opt/conda/bin/pip install -r /data/requirements.txt
 
-ADD ./resources/bin/metqc.sh /opt/conda/bin/metqc.sh
-ADD ./resources/renv /opt/conda/renv
-ADD ./resources/renv.lock /opt/conda/renv.lock
-ADD ./build/Rprofile /opt/conda/etc/Rprofile
-RUN Rscript /opt/conda/etc/Rprofile
 
 WORKDIR /data
 
+COPY --from=builder /opt/conda /opt/conda
 COPY --from=builder /app/source/target/uberjar/quartet-metqc-report*.jar /quartet-metqc-report.jar
 
 # Run it

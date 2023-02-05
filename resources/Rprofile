@@ -1,5 +1,7 @@
 renv::activate("<plugin_env_path>");
 renv::restore();
+renv::settings$use.cache(FALSE);
+renv::install("reshape2");
 pkgTest <- function(x) {
   if (!require(x,character.only = TRUE))
   {
