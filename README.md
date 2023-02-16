@@ -1,8 +1,12 @@
-# quartet-metqc-report
+# Quartet MetQC Report
 
-Visualizes Quality Control(QC) results for Quartet Project.
+From Quantified Expression Profiles to QC Report
 
-## Standalone Mode
+## How to run Quartet MetQC Report
+
+see more details on [QDP Docs](https://docs.chinese-quartet.org/data_pipelines/metabolomics/qc_report/).
+
+## Build from source code
 ### Prerequisite
 
 - Bash
@@ -10,6 +14,7 @@ Visualizes Quality Control(QC) results for Quartet Project.
 - virtualenv
 - pip3
 - R >= 3.6.3
+
 ### Installation
 
 ```
